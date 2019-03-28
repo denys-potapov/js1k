@@ -42,11 +42,16 @@ a.style="width:100%;height:100vh;float:left";
 // We need to redefine the webgl context because adding the textarea in the DOM rewrote the canvas "a".
 
 for(i in g){
-  g[i[0] + i[6]] = g[i]
+  g[i[0] + i[6]] = g[i];
 }
-w = window
-// Mouse coordinates
-iMouse=[0,0,0,0];
+// we use only one uniofrom
+g.u = g.uniform1f;
+
+// Mouse input:
+// k: mouse down (0 / 1)
+// x,y: mouse cords
+x=y=k=0;
+
 // Use the WebGL context's scope for all the following code
 with(g){
   // Define a new program
@@ -67,19 +72,16 @@ with(g){
   // Main program
   // shaderSource(s=createShader(FRAGMENT_SHADER),'...');
   sS(s=cS(FN),`precision mediump float;
-uniform float t,a;
-varying lowp vec4 fragCoord;
-uniform vec4 iMouse;
+uniform float t,a,x,y;
 
 void main() {
-  //get coords and direction
-  vec2 uv=gl_FragCoord.xy/640.-.5;
-  uv.y*=a;
-  vec3 dir=vec3(uv,1.);
+  //get direction
+  vec3 dir=vec3(gl_FragCoord.xy/640.-.5,1.);
+  dir.y*=a;
 
   //mouse rotation
-  float a1=.5+iMouse.x/640.*2.;
-  float a2=.8+iMouse.y/640.*2.;
+  float a1=.5+x/500.;
+  float a2=.5+y/500.;
   mat2 rot1=mat2(cos(a1),sin(a1),-sin(a1),cos(a1));
   mat2 rot2=mat2(cos(a2),sin(a2),-sin(a2),cos(a2));
   dir.xz*=rot1;
@@ -165,16 +167,15 @@ void main() {
   // Main loop
   (L=function(e){
     // Current playback time (in 1/200 seconds)
-
-    uniform1f(gf(p,"t"), (new Date / 1e5) - o);
+    u(gf(p,"t"), (new Date / 1e5) - o);
 
     // Current sapect ration
-    uniform1f(gf(p,"a"), innerHeight / innerWidth);
+    u(gf(p,"a"), innerHeight / innerWidth);
 
     // Mouse coordinates
-    // uniform4f(getUniformLocation(p,"iMouse"),iMouse[0],iMouse[1],iMouse[2],iMouse[3]);
-    uniform4f(gf(p,"iMouse"),iMouse[0],iMouse[1],iMouse[2],iMouse[3]);
-    
+    u(gf(p,"x"), x);
+    u(gf(p,"y"), y);
+
     // Draw
     // drawArrays(TRIANGLE_FAN,0,3);
     dr(6,0,3);
@@ -184,14 +185,11 @@ void main() {
   })();
 }
 
-// Mouse input:
-// d: mouse down (0 / 1)
-y=0;
 
 // Toggle d on mouse down / up
-onmousedown=onmouseup=function(e){y^=1}
+onmousedown=onmouseup=function(e){k^=1}
 
 // Update iMouse on mouse move / click, according to z.
-onmousemove=function(e){if(y)iMouse[0]=e.pageX*0.495,iMouse[1]=e.pageY}
+onmousemove=function(e){if(k)x=e.pageX,y=e.pageY}
 
 </script>
