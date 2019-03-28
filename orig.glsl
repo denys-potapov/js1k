@@ -1,6 +1,8 @@
-// Star Nest by Pablo Roman Andrioli
-
-// This content is under the MIT License.
+precision mediump float;
+uniform float iGlobalTime,iFrame,iDate,iTimeDelta;
+varying lowp vec4 fragCoord;
+uniform vec2 iResolution;
+uniform vec4 iMouse;
 
 #define iterations 17
 #define formuparam 0.53
@@ -24,7 +26,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	vec2 uv=fragCoord.xy/iResolution.xy-.5;
 	uv.y*=iResolution.y/iResolution.x;
 	vec3 dir=vec3(uv*zoom,1.);
-	float time=iTime*speed+.25;
+	float time=iGlobalTime*speed+.25;
 
 	//mouse rotation
 	float a1=.5+iMouse.x/iResolution.x*2.;
@@ -63,3 +65,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	fragColor = vec4(v*.01,1.);	
 	
 }
+
+
+void main(){mainImage(gl_FragColor,gl_FragCoord.xy);gl_FragColor.w=1.;}
