@@ -66,7 +66,7 @@ with(g){
   // Main program
   // shaderSource(s=createShader(FRAGMENT_SHADER),'precision mediump float;uniform float iGlobalTime,iFrame,iDate,iTimeDelta;varying lowp vec4 fragCoord;uniform vec2 iResolution;uniform vec4 iMouse;' +c.value+'void main(){mainImage(gl_FragColor,gl_FragCoord.xy);gl_FragColor.w=1.;}');
   sS(s=cS(FN),`precision mediump float;
-uniform float iGlobalTime,iFrame,iDate,iTimeDelta,iAspect;
+uniform float iTime,iAspect;
 varying lowp vec4 fragCoord;
 uniform vec2 iResolution;
 uniform vec4 iMouse;
@@ -95,7 +95,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
   vec2 uv=fragCoord.xy/iResolution.xy-.5;
   uv.y*=iAspect;
   vec3 dir=vec3(uv*zoom,1.);
-  float time=iGlobalTime*speed+.25;
+  float time=iTime;
 
   //mouse rotation
   float a1=.5+iMouse.x/iResolution.x*2.;
@@ -174,41 +174,18 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);gl_FragColor.w=1.;}`);
   
   // Reset frame counter
   iFrame=0;
-  // Reset playback time (in seconds)
-  o=0;
   
-  // Date (in seconds)
-  f=new Date()/1e3
-  
-  // Time delta (in seconds)
-  d=0;
-  
+  // Start time (in seconds)
+  o = new Date()/1e5;
+
   // Main loop
   (L=function(){
-    
-    // Time delta since last frame (in seconds)
-    d=(new Date()/1e3-f);
-    // Date (in seconds)
-    f=new Date()/1e3;
-    
-    // uniform1f(getUniformLocation(p, "iTimeDelta"), d);
-    uniform1f(gf(p,"iTimeDelta"),d);
-    
-    // Current playback time (in seconds)
-    // uniform1f(getUniformLocation(p,"iGlobalTime"), o += d);
-    uniform1f(gf(p,"iGlobalTime"),o+=d);
-    
-    // Current playback frame
-    // uniform1f(getUniformLocation(p,"iFrame"),iFrame++);  
-    uniform1f(gf(p,"iFrame"),iFrame++);  
-    
-    // Date
-    // uniform1f(getUniformLocation(p,"iDate"), ~~f);
-    uniform1f(gf(p,"iDate"),~~f);
-  
-    // Date
-    // uniform1f(getUniformLocation(p,"iDate"), ~~f);
-    uniform1f(gf(p,"iAspect"),innerHeight / innerWidth);
+    // Current playback time (in 1/200 seconds)
+
+    uniform1f(gf(p,"iTime"), (new Date / 1e5) - o);
+
+    // Current sapect ration
+    uniform1f(gf(p,"iAspect"), innerHeight / innerWidth);
 
     // Mouse coordinates
     // uniform4f(getUniformLocation(p,"iMouse"),iMouse[0],iMouse[1],iMouse[2],iMouse[3]);
@@ -216,13 +193,12 @@ void main(){mainImage(gl_FragColor,gl_FragCoord.xy);gl_FragColor.w=1.;}`);
     
     // Viewport resolution
     // uniform2f(getUniformLocation(p,"iResolution"),640,360);
-    uniform2f(gf(p,"iResolution"), 640, 360);
-    
+    uniform2f(gf(p,"iResolution"), 640, 320);
+
     // Draw
     // drawArrays(TRIANGLE_FAN,0,3);
     dr(6,0,3);
     
-    console.log(innerWidth, innerHeight);
     // Next frame
     requestAnimationFrame(L);
   })();
