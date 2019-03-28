@@ -1,5 +1,5 @@
 precision mediump float;
-uniform float iTime,iAspect;
+uniform float t,a;
 varying lowp vec4 fragCoord;
 uniform vec2 iResolution;
 uniform vec4 iMouse;
@@ -7,9 +7,8 @@ uniform vec4 iMouse;
 void main() {
   //get coords and direction
   vec2 uv=gl_FragCoord.xy/iResolution.xy-.5;
-  uv.y*=iAspect;
+  uv.y*=a;
   vec3 dir=vec3(uv,1.);
-  float time=iTime;
 
   //mouse rotation
   float a1=.5+iMouse.x/iResolution.x*2.;
@@ -19,7 +18,7 @@ void main() {
   dir.xz*=rot1;
   dir.xy*=rot2;
   vec3 from=vec3(1.,.5,0.5);
-  from+=vec3(time*2.,time,-2.);
+  from+=vec3(t*2.,t,-2.);
   from.xz*=rot1;
   from.xy*=rot2;
   
