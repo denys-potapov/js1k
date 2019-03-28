@@ -112,8 +112,10 @@ a.insertAdjacentHTML(
 // drawArrays => dr
 // FRAGMENT_SHADER => FN (value: 35632)
 // ELEMENT_ARRAY_BUFFER_BINDING => ET (value: 34965)
+w = window;
 for(i in g){
-  g[i[0] + i[6]] = g[i]
+  w[i[0] + i[6]] = g[i]
+  console.log(i[0] + i[6], w[i[0] + i[6]])
 }
 
 // Put "g" in the current scope to use any method / constant without having to write "g.".
@@ -273,7 +275,7 @@ with(g){
       |
 
       // iGlobaltime (time since last input or reload),
-      uniform1f(gf(p, `iGlobalTime`), o += d)
+      uniform1f(gf(p, `iGlobalTime`), o += d * 0.010 )
       
       |
 
