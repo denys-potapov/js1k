@@ -66,18 +66,18 @@ with(g){
   
   // Main program
   // shaderSource(s=createShader(FRAGMENT_SHADER),'...');
-  sS(s=cS(FN),`precision mediump float;uniform float iTime,iAspect;varying lowp vec4 fragCoord;uniform vec2 iResolution;uniform vec4 iMouse;void main(){vec2 v=gl_FragCoord.rg/iResolution.rg-.5;v.g*=iAspect;vec3 f=vec3(v,1.);float i=iTime,c=.5+iMouse.r/iResolution.r*2.,s=.8+iMouse.g/iResolution.g*2.;mat2 m=mat2(cos(c),sin(c),-sin(c),cos(c)),a=mat2(cos(s),sin(s),-sin(s),cos(s));f.rb*=m;f.rg*=a;vec3 n=vec3(1.,.5,.5);n+=vec3(i*2.,i,-2.);n.rb*=m;n.rg*=a;float g=.1,t=1.;vec3 l=vec3(0.);for(int u=0;u<20;u++){vec3 e=n+g*f*.5;e=abs(vec3(1.)-mod(e,vec3(2.)));float r,b=r=0.;for(int o=0;o<20;o++)e=abs(e)/dot(e,e)-.53,b+=abs(length(e)-r),r=length(e);float o=max(0.,.3-b*b*.001);if(u>6)t*=1.-o;l+=t;b*=b*b;l+=vec3(g,g*g,g*g*g*g)*b*.0015*t;t*=.73;g+=.1;}l=mix(vec3(length(l)),l,.85);gl_FragColor=vec4(l*.01,1.);}`);
+  sS(s=cS(FN),'precision mediump float;uniform float iTime,iAspect;varying lowp vec4 fragCoord;uniform vec2 iResolution;uniform vec4 iMouse;void main(){vec2 v=gl_FragCoord.rg/iResolution.rg-.5;v.g*=iAspect;vec3 f=vec3(v,1.);float i=iTime,c=.5+iMouse.r/iResolution.r*2.,s=.8+iMouse.g/iResolution.g*2.;mat2 m=mat2(cos(c),sin(c),-sin(c),cos(c)),a=mat2(cos(s),sin(s),-sin(s),cos(s));f.rb*=m;f.rg*=a;vec3 n=vec3(1.,.5,.5);n+=vec3(i*2.,i,-2.);n.rb*=m;n.rg*=a;float g=.1,t=1.;vec3 l=vec3(0.);for(int u=0;u<20;u++){vec3 e=n+g*f*.5;e=abs(vec3(1.)-mod(e,vec3(2.)));float r,b=r=0.;for(int o=0;o<20;o++)e=abs(e)/dot(e,e)-.53,b+=abs(length(e)-r),r=length(e);float o=max(0.,.3-b*b*.001);if(u>6)t*=1.-o;l+=t;b*=b*b;l+=vec3(g,g*g,g*g*g*g)*b*.0015*t;t*=.73;g+=.1;}l=mix(vec3(length(l)),l,.85);gl_FragColor=vec4(l*.01,1.);}');
   
   // Compile and attach it to the program
   // compileShader(s);
   ce(s);
   
   // DEBUGS
-  if (!g.getShaderParameter(s, g.COMPILE_STATUS)) {
-    g.getShaderInfoLog(s).trim().split("\n").forEach(ss =>
-    console.warn("[shader] " + ss))
-    throw new Error("Error while compiling shader")
-  };
+  // if (!g.getShaderParameter(s, g.COMPILE_STATUS)) {
+  //   g.getShaderInfoLog(s).trim().split("\n").forEach(ss =>
+  //   console.warn("[shader] " + ss))
+  //   throw new Error("Error while compiling shader")
+  // };
 
   // attachShader(p,s);
   aS(p,s);
@@ -115,7 +115,7 @@ with(g){
     uniform1f(gf(p,"iTime"), (new Date / 1e5) - o);
 
     // Current sapect ration
-    uniform1f(gf(p,"iAspect"), innerHeight / innerWidth);
+    uniform1f(gf(p,"iAspect"), innerHeight - 50 / innerWidth);
 
     // Mouse coordinates
     // uniform4f(getUniformLocation(p,"iMouse"),iMouse[0],iMouse[1],iMouse[2],iMouse[3]);
