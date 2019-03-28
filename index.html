@@ -18,7 +18,7 @@ JS1K's shim gives the following vars for free:
 */
 
 // GUI: canvas
-a.style="width:100%;height:100vh;float:left";
+a.style='width:100%;height:100vh;float:left';
 
 // Canvas methods hashing:
 // This loop creates tiny shortcuts for all the webgl context's methods/constants we need:
@@ -60,7 +60,7 @@ with(g){
   
   // Basic vertex shader
   // shaderSource(s=createShader(VERTEX_SHADER),"attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}");
-  sS(s=cS(35633),"attribute vec2 p;void main(){gl_Position=vec4(p,1,1);}");
+  sS(s=cS(35633),'attribute vec2 p;void main(){gl_Position=vec4(p,1,1);}');
   
   // Compile and attach it to the program
   // compileShader(s);
@@ -71,58 +71,7 @@ with(g){
   
   // Main program
   // shaderSource(s=createShader(FRAGMENT_SHADER),'...');
-  sS(s=cS(FN),`precision mediump float;
-uniform float t,a,x,y;
-
-void main() {
-  //get direction
-  vec3 dir=vec3(gl_FragCoord.xy/640.-.5,1.);
-  dir.y*=a;
-
-  //mouse rotation
-  float a1=.5+x/500.;
-  float a2=.5+y/500.;
-  mat2 rot1=mat2(cos(a1),sin(a1),-sin(a1),cos(a1));
-  mat2 rot2=mat2(cos(a2),sin(a2),-sin(a2),cos(a2));
-  dir.xz*=rot1;
-  dir.xy*=rot2;
-  vec3 from=vec3(1.,.5,0.5);
-  from+=vec3(t*2.,t,-2.);
-  from.xz*=rot1;
-  from.xy*=rot2;
-  
-  //volumetric rendering
-  float s=0.1,fade=1.;
-  vec3 v=vec3(0.);
-
-  // for (int r=0; r<volsteps; r++) {
-  // #define volsteps 20
-  for (int r=0; r<20; r++) {
-    vec3 p=from+s*dir*.5;
-    p = abs(vec3(1.)-mod(p,vec3(2.))); // tiling fold
-    float pa,a=pa=0.;
-    // for (int i=0; i<iterations; i++) { 
-    // #define iterations 17
-    for (int r=0; r<20; r++) { 
-      p=abs(p)/dot(p,p)-0.53; // the magic formula #define formuparam 0.53
-      a+=abs(length(p)-pa); // absolute sum of average change
-      pa=length(p);
-    }
-
-    if (r>6) fade*=1.-max(0.,.3-a*a*.001); // dark matter, don't render near
-    //v+=vec3(dm,dm*.5,0.);
-
-    // v+=vec3(s,s*s,s*s*s*s)*a*brightness*fade;
-    // #define brightness 0.0015
-
-    v+=fade + vec3(s,s*s,s*s*s*s)*a*a*a*.0015*fade; // coloring based on distance
-    fade*=.73; // distance fading #define distfading 0.730
-    s+=0.1; // #define stepsize 0.1
-  }
-  // #define saturation 0.850
-  v=mix(vec3(length(v)),v,.85); //color adjust
-  gl_FragColor = vec4(v*.01,1.); 
-}`);
+  sS(s=cS(FN),'uniform float t,a,x,y;void main(){vec3 f=vec3(gl_FragCoord.rg/640.-.5,1.);f.g*=a;float c=.5+x/500.,v=.5+y/500.;mat2 m=mat2(cos(c),sin(c),-sin(c),cos(c)),s=mat2(cos(v),sin(v),-sin(v),cos(v));f.rb*=m;f.rg*=s;vec3 r=vec3(1.,.5,.5);r+=vec3(t*2.,t,-2.);r.rb*=m;r.rg*=s;float g=.1,b=1.;vec3 i=vec3(0.);for(int l=0;l<20;l++){vec3 o=r+g*f*.5;o=abs(vec3(1.)-mod(o,vec3(2.)));float e,n=e=0.;for(int d=0;d<20;d++)o=abs(o)/dot(o,o)-.53,n+=abs(length(o)-e),e=length(o);if(l>6)b*=1.-max(0.,.3-n*n*.001);i+=b+vec3(g,g*g,g*g*g*g)*n*n*n*.0015*b;b*=.73;g+=.1;}i=mix(vec3(length(i)),i,.85);gl_FragColor=vec4(i*.01,1.);}');
   
   // Compile and attach it to the program
   // compileShader(s);
@@ -164,14 +113,14 @@ void main() {
   // Main loop
   (L=function(e){
     // Current playback time (in 1/200 seconds)
-    u(gf(p,"t"), (new Date / 1e5) - o);
+    u(gf(p,'t'), (new Date / 1e5) - o);
 
     // Current sapect ration
-    u(gf(p,"a"), innerHeight / innerWidth);
+    u(gf(p,'a'), innerHeight / innerWidth);
 
     // Mouse coordinates
-    u(gf(p,"x"), x);
-    u(gf(p,"y"), y);
+    u(gf(p,'x'), x);
+    u(gf(p,'y'), y);
 
     // Draw
     // drawArrays(TRIANGLE_FAN,0,3);
