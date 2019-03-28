@@ -4,16 +4,6 @@ varying lowp vec4 fragCoord;
 uniform vec2 iResolution;
 uniform vec4 iMouse;
 
-#define formuparam 0.53
-
-#define brightness 0.0015
-#define darkmatter 0.300
-#define distfading 0.730
-#define saturation 0.850
-
-#define resolution 640.
-
-
 void main() {
   //get coords and direction
   vec2 uv=gl_FragCoord.xy/iResolution.xy-.5;
@@ -46,21 +36,25 @@ void main() {
     // for (int i=0; i<iterations; i++) { 
     // #define iterations 17
     for (int r=0; r<20; r++) { 
-      p=abs(p)/dot(p,p)-formuparam; // the magic formula
+      p=abs(p)/dot(p,p)-0.53; // the magic formula #define formuparam 0.53
       a+=abs(length(p)-pa); // absolute sum of average change
       pa=length(p);
     }
-    float dm=max(0.,darkmatter-a*a*.001); //dark matter
+    // #define darkmatter 0.300
+    float dm=max(0.,.3-a*a*.001); //dark matter
     
     if (r>6) fade*=1.-dm; // dark matter, don't render near
     //v+=vec3(dm,dm*.5,0.);
     v+=fade;
     a*=a*a; // add contrast
     // v+=vec3(s,s*s,s*s*s*s)*a*brightness*fade;
-    v+=vec3(s,s*s,s*s*s*s)*a*brightness*fade; // coloring based on distance
+    // #define brightness 0.0015
+
+    v+=vec3(s,s*s,s*s*s*s)*a*.0015*fade; // coloring based on distance
     fade*=.73; // distance fading #define distfading 0.730
     s+=0.1; // #define stepsize 0.1
   }
-  v=mix(vec3(length(v)),v,saturation); //color adjust
+  // #define saturation 0.850
+  v=mix(vec3(length(v)),v,.85); //color adjust
   gl_FragColor = vec4(v*.01,1.); 
 }
