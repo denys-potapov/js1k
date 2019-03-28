@@ -163,7 +163,7 @@ void main() {
   o = (new Date / 1e5);
 
   // Main loop
-  (L=function(){
+  (L=function(e){
     // Current playback time (in 1/200 seconds)
 
     uniform1f(gf(p,"t"), (new Date / 1e5) - o);
@@ -185,20 +185,13 @@ void main() {
 }
 
 // Mouse input:
-// y: mouse down (0 / 1)
+// d: mouse down (0 / 1)
 y=0;
 
-// z: canvas size (1: half / 2: full screen)
-z=1;
-
-// Toggle y on mouse down / up
+// Toggle d on mouse down / up
 onmousedown=onmouseup=function(e){y^=1}
 
 // Update iMouse on mouse move / click, according to z.
-a.onmousemove=function(e){if(y)iMouse[0]=e.pageX*0.495*z,iMouse[1]=e.pageY}
-a.onclick=function(e){iMouse[2]=e.pageX*0.495*z,iMouse[3]=e.pageY}
-
-// On double click, toggle canvas size
-a.ondblclick=function(e){z=3-z;a.style.width=c.style.width=z*49.5+'%'}
+onmousemove=function(e){if(y)iMouse[0]=e.pageX*0.495,iMouse[1]=e.pageY}
 
 </script>
